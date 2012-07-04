@@ -95,8 +95,8 @@ Marionette.Application = function(templatePath, ready){
 
 Marionette.Application.prototype.dispatch = function(element){
 	if(this.requestRunning) this.xhr.abort();
-	var method = element.method || 'GET';
-	var url = element.action || element.href; // what about data-method?
+	var method = element.dataset.method || element.method || 'GET';
+	var url = element.dataset.url || element.action || element.href;
 	
 	var data = null;
 	if(element.tagName.toUpperCase() == "FORM"){
