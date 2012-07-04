@@ -68,7 +68,7 @@ Marionette.Application = function(templatePath, ready){
 			// Set up the listeners
 			// what do we do about assholes who click-click-click-click?
 			document.addEventListener('click', function(evt){
-				if(evt.target.tagName == 'A'){
+				if(evt.target.tagName.toUpperCase() == 'A'){
 					evt.preventDefault();
 					self.dispatch(evt.target);
 				}
