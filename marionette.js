@@ -105,7 +105,7 @@ Marionette.Application.prototype.dispatch = function(element){
 		'Accept': 'application/json;',
 		'X-Requested-With', 'XMLHttpRequest'
 	});
-}
+};
 
 Marionette.Application.prototype.request = function (method, url, data, headersCollection) {
 	this.xhr.open(method, url);
