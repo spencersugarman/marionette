@@ -99,8 +99,7 @@ Marionette.Application.prototype.dispatch = function(element){
 	var url = element.action || element.href; // what about data-method?
 	
 	var data = null;
-	// TODO: Fix tagname stuff to work accross doctypes
-	if(element.tagName == "FORM"){
+	if(element.tagName.toUpperCase() == "FORM"){
 		data = new FormData(element);
 	}
 	
