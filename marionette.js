@@ -1,6 +1,5 @@
 /* Things Marionette takes for granted
 
-XMLHttpRequest (sorry IE6)
 JSON.parse
 FormData
 
@@ -57,7 +56,22 @@ Marionette.Application = function(templatePath, ready){
 		}
 	}
 
-	this.xhr = new XMLHttpRequest();
+	this.xhr = (function () {
+		// taken from MDN
+		if (window.XMLHttpRequest) { 
+			return new XMLHttpRequest();  
+		} else if (window.ActiveXObject) {
+			try {  
+				return new ActiveXObject("Msxml2.XMLHTTP");  
+			}   
+			catch (e) {  
+				try {  
+					return new ActiveXObject("Microsoft.XMLHTTP");  
+				}   
+				catch (e) {}  
+			}  
+		}
+	})();
 	
 	this.xhr.onreadystatechange = function(){
 		if(this.readyState == 4 && this.status == 200){
