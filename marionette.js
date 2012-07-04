@@ -30,11 +30,10 @@ Marionette.Application = function(templatePath, ready){
 			if(this.status == 200){
 				var redirect = this.getResponseHeader('X-Marionette-Location');
 				if(redirect){
-					this.open('GET', redirect);
-					// Yuck. Refactor with a request wrapper.
-					this.setRequestHeader('Accept', 'application/json;');
-					this.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-					this.send();
+					this.request('GET', redirect, null, {
+						'Accept': 'application/json;',
+						'X-Requested-With': 'XMLHttpRequest'
+					});
 				}else{
 					var json;
 					try{
@@ -88,9 +87,7 @@ Marionette.Application = function(templatePath, ready){
 		}
 	}
 	
-	this.xhr.open('GET', templatePath);
-	this.xhr.send();
-
+	this.request('GET', templatePath);
 };
 
 Marionette.Application.prototype.dispatch = function(element){
@@ -104,8 +101,18 @@ Marionette.Application.prototype.dispatch = function(element){
 	}
 	
 	this.requestUrl = url;
-	this.xhr.open(method, url);
-	this.xhr.setRequestHeader('Accept', 'application/json;');
-	this.xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-	this.xhr.send(data);
+	this.request(method, url, data, {
+		'Accept': 'application/json;',
+		'X-Requested-With', 'XMLHttpRequest'
+	});
 }
+
+Marionette.Application.prototype.request = function (method, url, data, headersCollection) {
+	this.xhr.open(method, url);
+	if (typeof headers === 'object') {
+		for (var header in headers) {
+			this.xhr.setRequestHeader(header, headersCollection[header]);
+		}
+	}
+	this.xhr.send(data);
+};
