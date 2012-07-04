@@ -2,7 +2,6 @@
 
 XMLHttpRequest (sorry IE6)
 JSON.parse
-addEventListener (sorry IE)
 FormData
 
 */
@@ -57,7 +56,7 @@ Marionette.Application = function(templatePath, ready){
 			}
 		}
 	}
-	
+
 	this.xhr = new XMLHttpRequest();
 	
 	this.xhr.onreadystatechange = function(){
@@ -67,13 +66,13 @@ Marionette.Application = function(templatePath, ready){
 			
 			// Set up the listeners
 			// what do we do about assholes who click-click-click-click?
-			document.addEventListener('click', function(evt){
+			self.addEventListener(document, 'click', function(evt){
 				if(evt.target.tagName.toUpperCase() == 'A'){
 					evt.preventDefault();
 					self.dispatch(evt.target);
 				}
 			});
-			document.addEventListener('submit', function(evt){
+			self.addEventListener(document, 'submit', function(evt){
 				evt.preventDefault();
 				self.dispatch(evt.target);
 			});
@@ -89,6 +88,19 @@ Marionette.Application = function(templatePath, ready){
 	
 	this.request('GET', templatePath);
 };
+
+Marionette.Application.prototype.addEventListener = (function () {
+	// taken from MDN
+	if (document.addEventListener) {  
+		return function (el, type, listener, useCapture) { 
+			el.addEventListener(type, listener, useCapture);   
+		};
+	} else if (document.attachEvent)  {
+		return function (el, type, listener) {
+			el.attachEvent('on' + type, listener);
+		};
+	}  
+})();
 
 Marionette.Application.prototype.dispatch = function(element){
 	if(this.requestRunning) this.xhr.abort();
