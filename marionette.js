@@ -109,7 +109,7 @@ Marionette.Application.prototype.dispatch = function(element){
 
 Marionette.Application.prototype.request = function (method, url, data, headersCollection) {
 	this.xhr.open(method, url);
-	if (typeof headers === 'object') {
+	if (typeof headersCollection === 'object') {
 		for (var header in headers) {
 			this.xhr.setRequestHeader(header, headersCollection[header]);
 		}
